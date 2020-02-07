@@ -56,6 +56,7 @@ UserSchema.method({
   safeModel() {
     return _.omit(this.toObject(), ['password', '__v']);
   },
+
 });
 
 /**
@@ -108,6 +109,17 @@ UserSchema.statics = {
       .skip(+skip)
       .limit(+limit)
       .exec();
+  },
+  getUserByActiveStatus(email) {
+    return this.find({ email, isActive: true })
+      .exec()
+      .then((user) => {
+        if (user) {
+          return user;
+        }
+        const err = new APIError('No such user exists!', httpStatus.NOT_FOUND, true);
+        return Promise.reject(err);
+      });
   },
 };
 

@@ -73,6 +73,13 @@ function remove(req, res, next) {
     .catch(e => next(e));
 }
 
+function getUserByActiveStatus(req, res, next) {
+  const { email } = req.body;
+  const getUserByStatus = User.getUserByActiveStatus(email);
+  getUserByStatus.then(users => res.json(users))
+    .catch(e => next(e));
+}
+
 module.exports = {
   load,
   get,
@@ -80,4 +87,5 @@ module.exports = {
   update,
   list,
   remove,
+  getUserByActiveStatus,
 };

@@ -26,20 +26,23 @@ const paramValidation = {
 
 router.route('/')
   /** GET /api/books - Get list of books */
-  .get(bookCtrl.list)
+  .get(bookCtrl.listBooks)
 
   /** POST /api/books - Create new book */
-  .post(validate(paramValidation.createBook), bookCtrl.create);
+  // .post(validate(paramValidation.createBook), bookCtrl.create);
+  .post(bookCtrl.createNewBook);
 
 router.route('/:bookId')
   /** GET /api/books/:bookId - Get book */
   .get(bookCtrl.get)
 
-  /** PUT /api/books/:bookId - Update book */
-  .put(validate(paramValidation.updateBook), bookCtrl.update)
+/** PUT /api/books/:bookId - Update book */
+// .put(validate(paramValidation.updateBook), bookCtrl.update)
 
   /** DELETE /api/books/:bookId - Delete book */
-  .delete(bookCtrl.remove);
+  .delete(bookCtrl.remove)
+
+  .put(bookCtrl.findBookAndUpdate);
 
 /** Load book when API with bookId route parameter is hit */
 router.param('bookId', bookCtrl.load);

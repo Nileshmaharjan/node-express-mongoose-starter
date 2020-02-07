@@ -1,7 +1,13 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
+const mongooseAggregatePaginate = require('mongoose-aggregate-paginate-v2');
 const httpStatus = require('http-status');
 const APIError = require('../../helpers/APIError');
+
 
 /**
  * Book Schema
@@ -33,16 +39,22 @@ const BookSchema = new mongoose.Schema({
   },
 });
 
+
 /**
  * - pre-post-save hooks
  * - validations
  * - virtuals
  */
 
+BookSchema.pre('save', function (next) {
+  next();
+});
+
 /**
  * Methods
  */
-BookSchema.method({});
+BookSchema.method({
+});
 
 /**
  * Statics
@@ -90,8 +102,39 @@ BookSchema.statics = {
       .populate('owner')
       .exec();
   },
+
+  listBooks(options) {
+    options = options || {};
+
+    return this.aggregate([{
+      $match: {
+        owner: mongoose.Types.ObjectId(options),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'owner',
+        foreignField: '_id',
+        as: 'owners',
+      },
+    },
+    { $unwind: '$owners' },
+    {
+      $project: {
+        bookName: 1,
+        author: 1,
+        isActive: 1,
+        'owners.email': 1,
+        'owners.firstName': 1,
+      },
+    },
+    ]);
+  },
 };
 
+BookSchema.plugin(mongoosePaginate);
+BookSchema.plugin(mongooseAggregatePaginate);
 /**
  * @typedef Book
  */

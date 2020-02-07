@@ -39,4 +39,7 @@ router.route('/:userId')
 /** Load user when API with userId route parameter is hit */
 router.param('userId', userCtrl.load);
 
+router.route('/getUserByActiveStatus')
+  .post(userCtrl.getUserByActiveStatus);
+
 module.exports = router;
