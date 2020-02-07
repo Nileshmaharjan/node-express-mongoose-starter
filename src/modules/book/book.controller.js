@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
+/* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
-const httpStatus = require('http-status');
+// const httpStatus = require('http-status');
 const Book = require('./book.model');
-const APIError = require('../../helpers/APIError');
+// const APIError = require('../../helpers/APIError');
 
 
 /**
@@ -65,24 +67,23 @@ async function createNewBook(req, res, next) {
       });
     }
   } catch (e) {
-    console.log(e);
     next(e);
   }
 }
 
-async function listBooksWithoutAggregate(req, res, next) {
-  try {
-    const query = { owner: res.locals.session._id };
-    // const query = await Book.find({email: 'mjn.nilesh@gmail.com'});
-    const paginatedBooks = await Book.paginate(query, options);
+// async function listBooksWithoutAggregate(req, res, next) {
+//   try {
+//     const query = { owner: res.locals.session._id };
+//     // const query = await Book.find({email: 'mjn.nilesh@gmail.com'});
+//     const paginatedBooks = await Book.paginate(query, options);
 
-    return res.status(200).json({
-      paginatedBooks,
-    });
-  } catch (e) {
-    return next(e);
-  }
-}
+//     return res.status(200).json({
+//       paginatedBooks,
+//     });
+//   } catch (e) {
+//     return next(e);
+//   }
+// }
 
 async function pagination(req, res, next) {
   try {
@@ -156,6 +157,6 @@ module.exports = {
   remove,
   createNewBook,
   listBooks,
-  listBooksWithoutAggregate,
+  // listBooksWithoutAggregate,
   findBookAndUpdate,
 };

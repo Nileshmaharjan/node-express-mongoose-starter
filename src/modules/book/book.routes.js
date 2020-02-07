@@ -1,28 +1,28 @@
 const express = require('express');
-const validate = require('express-validation');
-const Joi = require('@hapi/joi');
+// const validate = require('express-validation');
+// const Joi = require('@hapi/joi');
 const bookCtrl = require('./book.controller');
 
 const router = express.Router(); // eslint-disable-line new-cap
-const paramValidation = {
-  createBook: {
-    body: {
-      bookName: Joi.string().required(),
-      author: Joi.string().required(),
-      isbn: Joi.string().min(10).max(13).required(),
-    },
-  },
-  updateBook: {
-    params: {
-      bookId: Joi.string().required(),
-    },
-    body: {
-      bookName: Joi.string().required(),
-      author: Joi.string().required(),
-      isbn: Joi.string().min(10).max(13).required(),
-    },
-  },
-};
+// const paramValidation = {
+//   createBook: {
+//     body: {
+//       bookName: Joi.string().required(),
+//       author: Joi.string().required(),
+//       isbn: Joi.string().min(10).max(13).required(),
+//     },
+//   },
+//   updateBook: {
+//     params: {
+//       bookId: Joi.string().required(),
+//     },
+//     body: {
+//       bookName: Joi.string().required(),
+//       author: Joi.string().required(),
+//       isbn: Joi.string().min(10).max(13).required(),
+//     },
+//   },
+// };
 
 router.route('/')
   /** GET /api/books - Get list of books */
