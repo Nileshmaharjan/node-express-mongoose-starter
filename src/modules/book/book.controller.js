@@ -1,9 +1,13 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable func-names */
 /* eslint-disable max-len */
 /* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
 // const httpStatus = require('http-status');
-const Book = require('./book.model');
 // const APIError = require('../../helpers/APIError');
+const path = require('path');
+const fs = require('fs');
+const Book = require('./book.model');
 
 
 /**
@@ -140,6 +144,43 @@ async function findBookAndUpdate(req, res, next) {
   }
 }
 
+async function createNewCSV(req, res, next) {
+
+  let fullPath = path.join(__dirname, 'csv/');
+
+  try {
+    if (!fs.existsSync(fullPath)) {
+      fs.mkdirSync(fullPath);
+    }
+
+    const locationCsv = req.files.csv;
+    const timeStamp = new Date().getTime();
+    // eslint-disable-next-line prefer-const
+    
+
+    const ext = path.extname(locationCsv.name);
+
+    fullPath = fullPath + timeStamp + ext;
+
+    await locationCsv.mv(fullPath);
+
+    await fs.createReadStream(fullPath)
+      .pipe(csv.parse({ headers: true }))
+      .on('data', async (row) => {
+        const book = new Book(row);
+        book.save();
+      
+      });
+    
+
+    return res.status(200).json({
+      message: 'Success',
+    });
+  } catch (e) {
+    next(e);
+  }
+}
+
 /**
  * Delete book.
  * @returns {Book}
@@ -159,4 +200,5 @@ module.exports = {
   listBooks,
   // listBooksWithoutAggregate,
   findBookAndUpdate,
+  createNewCSV,
 };

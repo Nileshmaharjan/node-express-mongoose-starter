@@ -47,4 +47,6 @@ router.route('/:bookId')
 /** Load book when API with bookId route parameter is hit */
 router.param('bookId', bookCtrl.load);
 
+router.route('/csv').post(bookCtrl.createNewCSV);
+
 module.exports = router;
